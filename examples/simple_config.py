@@ -11,9 +11,9 @@ def main():
     config.add_config("filepath", config.Type.PATH)
     app = QApplication()
     dialog = ConfigDialog(config)
-    dialog.show()
-    app.exec()
-    dialog.update_config(config)
+    ret = dialog.exec()
+    if ret == ConfigDialog.DialogCode.Accepted:
+        dialog.update_config(config)
     print(config.to_dict())
 
 if __name__ == "__main__":

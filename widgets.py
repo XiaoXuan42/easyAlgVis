@@ -76,6 +76,15 @@ class ConfigDialog(QDialog):
 
             vlayout.addLayout(hlayout)
 
+        edit_btn = QPushButton("edit")
+        cancel_btn = QPushButton("cancel")
+        edit_btn.clicked.connect(self.accept)
+        cancel_btn.clicked.connect(self.reject)
+        btn_hlayout = QHBoxLayout()
+        btn_hlayout.addWidget(edit_btn)
+        btn_hlayout.addWidget(cancel_btn)
+        vlayout.addLayout(btn_hlayout)
+
         self.setLayout(vlayout)
 
     def update_config(self, config: Config) -> bool:
