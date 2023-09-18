@@ -31,7 +31,7 @@ def main():
     config.add_config("path", Config.Type.PATH)
 
     framework = InputAlgOutFramwork(
-        rt, config, f_config=f_config, f_alg=f_alg
+        rt, config, f_config=f_config, f_alg=f_alg, automatic=False
     )
     framework.show()
     import sys
