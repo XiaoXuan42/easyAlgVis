@@ -1,9 +1,10 @@
-from typing import Callable
+from typing import Callable, Optional
 from property import PropertyUpdation, PropertyQueryer
 from config import Config
 from window import ConfigDialog
 from PySide6.QtWidgets import *
 import components
+from components import FTrap
 
 
 class ConfigAlgFramework:
@@ -11,8 +12,8 @@ class ConfigAlgFramework:
         self,
         rt: components.RootComponent,
         config: Config,
-        f_config: Callable[[dict], PropertyUpdation],
-        f_alg: Callable[[dict, PropertyQueryer], PropertyUpdation],
+        f_config: Optional[Callable[[dict], PropertyUpdation]] = None,
+        f_alg: Optional[Callable[[dict, PropertyQueryer], PropertyUpdation]] = None,
         automatic=False,
         title=None
     ):
@@ -28,13 +29,22 @@ class ConfigAlgFramework:
         self.automatic = automatic
         self.title = title
 
+    def set_trap(self, label, trap: FTrap):
+        c = self.rt.get_component(label)
+        if c:
+            c.set_trap(trap)
+
+    def set_root_trap(self, trap: FTrap):
+        self.rt.set_trap(trap)
+
     def on_config_btn_clicked(self):
         cdialog = ConfigDialog(self.config, self.main_widget)
         ret = cdialog.exec()
         if ret == cdialog.DialogCode.Accepted:
             cdialog.update_config(self.config)
-            updation = self.f_config(self.config.to_dict())
-            updation.update_properties(self.rt)
+            if self.f_config:
+                updation = self.f_config(self.config.to_dict())
+                updation.update_properties(self.rt)
             if self.automatic:
                 self.run_alg()
             self.update_gui()
@@ -76,8 +86,9 @@ class ConfigAlgFramework:
     def run_alg(self):
         queryer = PropertyQueryer(self.rt)
         d_config = self.config.to_dict()
-        output_updation = self.f_alg(d_config, queryer)
-        output_updation.update_properties(self.rt)
+        if self.f_alg:
+            output_updation = self.f_alg(d_config, queryer)
+            output_updation.update_properties(self.rt)
 
     def show(self):
         self.main_widget.show()

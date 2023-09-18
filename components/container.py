@@ -11,8 +11,8 @@ from components.component import Component, ComponentElement
 
 
 class ContainerComponent(Component):
-    def __init__(self, label):
-        super().__init__(label)
+    def __init__(self, label, trap):
+        super().__init__(label, trap=trap)
         self.subcomponents: List[Component] = []
 
     def visit_components(self, component, f_pre=None, f_in=None, f_post=None):
@@ -46,12 +46,14 @@ class ContainerComponent(Component):
 
     def __call__(self, *args):
         self.subcomponents = list(args)
+        for c in self.subcomponents:
+            c._c_parent = self
         return self
 
 
 class BoxContainer(ContainerComponent):
-    def __init__(self, label):
-        super().__init__(label)
+    def __init__(self, label, trap):
+        super().__init__(label, trap=trap)
 
     def update(self, layout: QBoxLayout, parent) -> QLayout:
         subitems: List[ComponentElement] = []
@@ -101,8 +103,8 @@ class BoxContainer(ContainerComponent):
 
 
 class HBox(BoxContainer):
-    def __init__(self, label=""):
-        super().__init__(label)
+    def __init__(self, label="", trap=None):
+        super().__init__(label, trap=trap)
 
     def create_layout(self, parent):
         val = QHBoxLayout(parent)
@@ -110,8 +112,8 @@ class HBox(BoxContainer):
 
 
 class VBox(BoxContainer):
-    def __init__(self, label=""):
-        super().__init__(label)
+    def __init__(self, label="", trap=None):
+        super().__init__(label, trap=trap)
 
     def create_layout(self, parent):
         return QVBoxLayout(parent)

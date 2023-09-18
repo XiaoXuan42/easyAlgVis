@@ -1,14 +1,14 @@
-from PySide6.QtWidgets import QLabel, QWidget
+from PySide6.QtWidgets import QLabel, QWidget, QPushButton
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtCore import Qt
-from components.component import Component, ComponentElement
+from components.component import Component, ComponentElement, Event
 from typing import Optional
 import numpy as np
 
 
 class WidgetComponent(Component):
-    def __init__(self, label) -> None:
-        super().__init__(label)
+    def __init__(self, label, trap) -> None:
+        super().__init__(label, trap=trap)
 
     def update(self, element, parent) -> QWidget:
         if self.is_dirty():
@@ -18,8 +18,8 @@ class WidgetComponent(Component):
 
 
 class Image(WidgetComponent):
-    def __init__(self, label, width=100, height=100) -> None:
-        super().__init__(label)
+    def __init__(self, label, width=100, height=100, trap=None) -> None:
+        super().__init__(label, trap=trap)
         self.image: Optional[QImage] = None
         self.data: Optional[np.ndarray] = None
         self.data_format = "rgb"
@@ -85,8 +85,8 @@ class Image(WidgetComponent):
 
 
 class Text(WidgetComponent):
-    def __init__(self, label, text="") -> None:
-        super().__init__(label)
+    def __init__(self, label, text="", trap=None) -> None:
+        super().__init__(label, trap=trap)
         self.text = text
 
     def create(self, parent) -> ComponentElement:
@@ -94,5 +94,33 @@ class Text(WidgetComponent):
         return label
 
     def update(self, element: QLabel, parent) -> QWidget:
+        element.setText(self.text)
+        return element
+
+
+class PushButton(WidgetComponent):
+    def __init__(
+        self, label, text="", persistent=False, state=False, trap=None
+    ) -> None:
+        super().__init__(label, trap)
+        self.text = text
+        self.persistent = persistent
+        self.state = state
+
+    def clear(self):
+        super().clear()
+        if not self.persistent:
+            self.state = False
+
+    def _on_clicked(self):
+        self.state = not self.state
+        self.prop_event(Event(self, "clicked", self.state))
+
+    def create(self, parent) -> ComponentElement:
+        btn = QPushButton(self.text, parent)
+        btn.clicked.connect(self._on_clicked)
+        return btn
+
+    def update(self, element: QPushButton, parent) -> QWidget:
         element.setText(self.text)
         return element
