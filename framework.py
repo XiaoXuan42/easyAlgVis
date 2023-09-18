@@ -12,8 +12,8 @@ class InputAlgOutFramwork:
         rt: components.RootComponent,
         config: Config,
         f_config: Callable[[dict], PropertyUpdation],
-        f_alg: Callable[[PropertyQueryer], PropertyUpdation],
-        automatic=False
+        f_alg: Callable[[dict, PropertyQueryer], PropertyUpdation],
+        automatic=False,
     ):
         """
         Routine:
@@ -26,8 +26,6 @@ class InputAlgOutFramwork:
         self.f_alg = f_alg
         self.automatic = automatic
 
-        self._create_gui()
-
     def on_config_btn_clicked(self):
         cdialog = ConfigDialog(self.config, self.main_widget)
         ret = cdialog.exec()
@@ -36,11 +34,11 @@ class InputAlgOutFramwork:
             updation = self.f_config(self.config.to_dict())
             updation.update_properties(self.rt)
             if self.automatic:
-                self.run()
+                self.run_alg()
             self.update_gui()
 
     def on_run_btn_clicked(self):
-        self.run()
+        self.run_alg()
         self.update_gui()
 
     def _create_gui(self):
@@ -57,7 +55,7 @@ class InputAlgOutFramwork:
             run_btn = QPushButton("Run")
             run_btn.clicked.connect(self.on_run_btn_clicked)
             hlayout.addWidget(run_btn)
-        
+
         self.vlayout.addLayout(self.components_gui)
         self.vlayout.addLayout(hlayout)
 
@@ -70,10 +68,17 @@ class InputAlgOutFramwork:
             self.vlayout.insertLayout(0, new_components_gui)
             self.components_gui = new_components_gui
 
+    def run_alg(self):
+        queryer = PropertyQueryer(self.rt)
+        d_config = self.config.to_dict()
+        output_updation = self.f_alg(d_config, queryer)
+        output_updation.update_properties(self.rt)
+
     def show(self):
         self.main_widget.show()
 
-    def run(self):
-        queryer = PropertyQueryer(self.rt)
-        output_updation = self.f_alg(queryer)
-        output_updation.update_properties(self.rt)
+    def exec_gui(self):
+        app = QApplication()
+        self._create_gui()
+        self.show()
+        app.exec()
