@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QLabel, QWidget
 from PySide6.QtGui import QImage, QPixmap
 from PySide6.QtCore import Qt
-from components.component import Component
+from components.component import Component, ComponentElement
 from typing import Optional
 import numpy as np
 
@@ -67,3 +67,17 @@ class Image(WidgetComponent):
             pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio)
             label.setPixmap(pixmap)
         return label
+
+
+class Text(WidgetComponent):
+    def __init__(self, label, text="") -> None:
+        super().__init__(label)
+        self.text = text
+
+    def create(self, parent) -> ComponentElement:
+        label = QLabel(self.text, parent)
+        return label
+
+    def update(self, element: QLabel, parent) -> QWidget:
+        element.setText(self.text)
+        return element
