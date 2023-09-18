@@ -2,30 +2,26 @@ from config import Config
 from framework import InputAlgOutFramwork
 from property import PropertyUpdation, PropertyCollection
 from PySide6.QtWidgets import QApplication
-from PySide6.QtGui import QImage
 import components as c
-import numpy as np
 from PIL import Image as Image
 
 
 def f_config(config: dict):
     path = config["path"]
     updation = PropertyUpdation()
-    img = QImage()
-    if img.load(path):
-        updation.add_updation("image1", "data", img)
+    updation.add_updation("image1", "path", path)
     return updation
 
 
 def f_collector():
     collection = PropertyCollection()
-    collection.add_collection("image1", "data", "image")
+    collection.add_collection("image1", "image", "image")
     return collection
 
 
 def f_alg(attrs: dict):
     updation = PropertyUpdation()
-    updation.add_updation("image2", "data", attrs["image"])
+    updation.add_updation("image2", "image", attrs["image"])
     return updation
 
 
