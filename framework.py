@@ -6,7 +6,7 @@ from PySide6.QtWidgets import *
 import components
 
 
-class InputAlgOutFramwork:
+class ConfigAlgFramework:
     def __init__(
         self,
         rt: components.RootComponent,
@@ -14,6 +14,7 @@ class InputAlgOutFramwork:
         f_config: Callable[[dict], PropertyUpdation],
         f_alg: Callable[[dict, PropertyQueryer], PropertyUpdation],
         automatic=False,
+        title=None
     ):
         """
         Routine:
@@ -25,6 +26,7 @@ class InputAlgOutFramwork:
         self.f_config = f_config
         self.f_alg = f_alg
         self.automatic = automatic
+        self.title = title
 
     def on_config_btn_clicked(self):
         cdialog = ConfigDialog(self.config, self.main_widget)
@@ -60,6 +62,9 @@ class InputAlgOutFramwork:
         self.vlayout.addLayout(hlayout)
 
         self.main_widget.setLayout(self.vlayout)
+
+        if self.title:
+            self.main_widget.setWindowTitle(self.title)
 
     def update_gui(self):
         new_components_gui = self.rt.update(self.components_gui, self.main_widget)

@@ -1,5 +1,5 @@
 from config import Config
-from framework import InputAlgOutFramwork
+from framework import ConfigAlgFramework
 from property import PropertyUpdation, PropertyQueryer
 import components as c
 from PIL import Image as Image
@@ -28,7 +28,7 @@ def main():
     config = Config()
     config.add_config("path", Config.Type.PATH)
 
-    framework = InputAlgOutFramwork(
+    framework = ConfigAlgFramework(
         rt, config, f_config=f_config, f_alg=f_alg, automatic=False
     )
     framework.exec_gui()

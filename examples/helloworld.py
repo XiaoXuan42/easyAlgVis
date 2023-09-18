@@ -1,4 +1,4 @@
-from framework import InputAlgOutFramwork
+from framework import ConfigAlgFramework
 from property import PropertyUpdation
 from config import Config
 import components as c
@@ -18,7 +18,7 @@ def main():
     rt = c.RootComponent()(c.Text("text1", text="hello world"))
     config = Config()
     config.add_config("text", config.Type.STR, default_value="hello world")
-    framwork = InputAlgOutFramwork(
+    framwork = ConfigAlgFramework(
         rt, config, f_config=f_config, f_alg=f_alg, automatic=True
     )
     framwork.exec_gui()
