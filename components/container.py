@@ -83,11 +83,13 @@ class BoxContainer(ContainerComponent):
                 old_widget = old_item.widget()
                 if not (old_widget is item):
                     layout.removeWidget(old_widget)
+                    old_widget.deleteLater()
                     layout.insertWidget(i, item)
             elif isinstance(item, QLayout):
                 old_layout = old_item.layout()
                 if not (old_layout is item):
                     layout.removeItem(old_item)
+                    old_layout.deleteLater()
                     layout.insertItem(i, item)
             elif isinstance(item, QSpacerItem):
                 old_spacer = old_item.spacerItem()

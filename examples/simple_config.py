@@ -1,4 +1,4 @@
-from widgets import ConfigDialog, Config
+from window import ConfigDialog, Config
 from PySide6.QtWidgets import QApplication
 import sys
 

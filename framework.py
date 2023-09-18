@@ -1,7 +1,7 @@
 from typing import Callable
 from property import PropertyUpdation, PropertyCollection
 from config import Config
-from widgets import ConfigDialog
+from window import ConfigDialog
 from PySide6.QtWidgets import *
 import components
 
