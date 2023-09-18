@@ -76,7 +76,7 @@ class ConfigDialog(QDialog):
 
             vlayout.addLayout(hlayout)
 
-        edit_btn = QPushButton("edit")
+        edit_btn = QPushButton("update")
         cancel_btn = QPushButton("cancel")
         edit_btn.clicked.connect(self.accept)
         cancel_btn.clicked.connect(self.reject)
