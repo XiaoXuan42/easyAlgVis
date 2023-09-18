@@ -1,6 +1,6 @@
 from config import Config
 from framework import InputAlgOutFramwork
-from property import PropertyUpdation, PropertyCollection
+from property import PropertyUpdation, PropertyQueryer
 from PySide6.QtWidgets import QApplication
 import components as c
 from PIL import Image as Image
@@ -13,15 +13,9 @@ def f_config(config: dict):
     return updation
 
 
-def f_collector():
-    collection = PropertyCollection()
-    collection.add_collection("image1", "image", "image")
-    return collection
-
-
-def f_alg(attrs: dict):
+def f_alg(queryer: PropertyQueryer):
     updation = PropertyUpdation()
-    updation.add_updation("image2", "image", attrs["image"])
+    updation.add_updation("image2", "image", queryer.query("image1", "image"))
     return updation
 
 
@@ -37,7 +31,7 @@ def main():
     config.add_config("path", Config.Type.PATH)
 
     framework = InputAlgOutFramwork(
-        rt, config, f_config=f_config, f_collector=f_collector, f_alg=f_alg
+        rt, config, f_config=f_config, f_alg=f_alg
     )
     framework.show()
     import sys

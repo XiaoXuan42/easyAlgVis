@@ -1,5 +1,5 @@
 from typing import Callable
-from property import PropertyUpdation, PropertyCollection
+from property import PropertyUpdation, PropertyQueryer
 from config import Config
 from window import ConfigDialog
 from PySide6.QtWidgets import *
@@ -12,8 +12,7 @@ class InputAlgOutFramwork:
         rt: components.RootComponent,
         config: Config,
         f_config: Callable[[dict], PropertyUpdation],
-        f_collector: Callable[[], PropertyCollection],
-        f_alg: Callable[[dict], PropertyUpdation],
+        f_alg: Callable[[PropertyQueryer], PropertyUpdation],
     ):
         """
         Routine:
@@ -23,7 +22,6 @@ class InputAlgOutFramwork:
         self.rt = rt
         self.config = config
         self.f_config = f_config
-        self.f_collector = f_collector
         self.f_alg = f_alg
 
         self._create_gui()
@@ -60,7 +58,6 @@ class InputAlgOutFramwork:
         config = self.config.to_dict()
         updation = self.f_config(config)
         updation.update_properties(self.rt)
-        collector = self.f_collector()
-        inputs = collector.collect_properties(self.rt)
-        output_updation = self.f_alg(inputs)
+        queryer = PropertyQueryer(self.rt)
+        output_updation = self.f_alg(queryer)
         output_updation.update_properties(self.rt)
