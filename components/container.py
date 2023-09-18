@@ -30,6 +30,10 @@ class ContainerComponent(Component):
         f_pre = lambda c: c.clear_dirty()
         self.visit_components(self, f_pre)
 
+    def clear_all(self):
+        f_pre = lambda c: c.clear()
+        self.visit_components(self, f_pre)
+
     def create(self, parent) -> QLayout:
         element = self.create_layout(parent)
         subelements = []

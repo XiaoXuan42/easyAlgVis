@@ -82,6 +82,7 @@ class ConfigAlgFramework:
             self.vlayout.removeItem(self.components_gui)
             self.vlayout.insertLayout(0, new_components_gui)
             self.components_gui = new_components_gui
+        self.rt.clear_all()
 
     def run_alg(self):
         queryer = PropertyQueryer(self.rt)
