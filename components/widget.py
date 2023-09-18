@@ -27,6 +27,11 @@ class Image(WidgetComponent):
         self.width = width
         self.height = height
 
+    def _create_pixmap_from_img(self, img):
+        pixmap = QPixmap.fromImage(img)
+        pixmap.scaled(self.width, self.height)
+        return pixmap
+
     def _set_image(self, property):
         img = None
         if property in {"data", "data_format"}:
@@ -37,8 +42,10 @@ class Image(WidgetComponent):
             img2 = QImage()
             if img2.load(self.path):
                 img = img2
-        if img:
-            self.image = img
+        elif property == "image":
+            img = self.image
+
+        self.image = img
 
     def set_property(self, property, value):
         super().set_property(property, value)
@@ -63,10 +70,18 @@ class Image(WidgetComponent):
 
         if img:
             self.image = img
-            pixmap = QPixmap.fromImage(img)
-            pixmap.scaled(self.width, self.height, Qt.KeepAspectRatio)
+            pixmap = self._create_pixmap_from_img(img)
             label.setPixmap(pixmap)
         return label
+
+    def update(self, element: QLabel, parent) -> QWidget:
+        if self.is_dirty():
+            if self.image:
+                pixmap = self._create_pixmap_from_img(self.image)
+                element.setPixmap(pixmap)
+            else:
+                element.clear()
+        return element
 
 
 class Text(WidgetComponent):
