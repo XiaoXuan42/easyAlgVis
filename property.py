@@ -14,8 +14,8 @@ class PropertyUpdation:
             c = rt.get_component(label)
             if not c:
                 raise RuntimeError(label, f"{label} not found")
-            for p, v in updates:
-                c.setproperty(p, v)
+            for p, v in updates.items():
+                c.set_property(p, v)
 
 
 class PropertyCollection:
@@ -34,5 +34,5 @@ class PropertyCollection:
             if not c:
                 raise RuntimeError(label, f"{label} not found")
             for p, keyname in targets:
-                result[keyname] = c.__getattr__(p)
+                result[keyname] = c.get_property(p)
         return result
