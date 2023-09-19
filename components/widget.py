@@ -1,6 +1,5 @@
-from PySide6.QtWidgets import QLabel, QWidget, QPushButton
+from PySide6.QtWidgets import QLabel, QWidget, QPushButton, QLineEdit
 from PySide6.QtGui import QImage, QPixmap
-from PySide6.QtCore import Qt
 from components.component import Component, ComponentElement, Event
 from typing import Optional
 import numpy as np
@@ -98,6 +97,25 @@ class Text(WidgetComponent):
         return element
 
 
+class LineEdit(WidgetComponent):
+    def __init__(self, label="", text="", trap=None) -> None:
+        super().__init__(label, trap)
+        self.text = text
+
+    def _on_text_changed(self, new_text):
+        self.set_property("text", new_text)
+        self.prop_event(Event(self, "text_changed", new_text))
+
+    def create(self, parent) -> ComponentElement:
+        edit = QLineEdit(self.text, parent)
+        edit.textChanged.connect(self._on_text_changed)
+        return edit
+
+    def update(self, element: QLineEdit, parent) -> QWidget:
+        element.setText(element)
+        return element
+
+
 class PushButton(WidgetComponent):
     def __init__(
         self, label, text="", persistent=False, state=False, trap=None
@@ -113,7 +131,7 @@ class PushButton(WidgetComponent):
             self.state = False
 
     def _on_clicked(self):
-        self.state = not self.state
+        self.set_property("state", (not self.state))
         self.prop_event(Event(self, "clicked", self.state))
 
     def create(self, parent) -> ComponentElement:
