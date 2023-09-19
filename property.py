@@ -22,5 +22,8 @@ class PropertyQueryer:
     def __init__(self, rt: components.RootComponent) -> None:
         self.rt = rt
 
-    def query(self, label, property):
-        return self.rt.get_component(label).get_property(property)
+    def query(self, label, property=None):
+        if property is None:
+            return self.rt.get_component(label)
+        else:
+            return self.rt.get_component(label).get_property(property)

@@ -31,12 +31,20 @@ class Image(WidgetComponent):
         pixmap.scaled(self.width, self.height)
         return pixmap
 
+    def _correct_data_type(self):
+        if isinstance(self.data, np.ndarray):
+            if self.data_format == QImage.Format.Format_RGB888:
+                if issubclass(self.data.dtype, np.floating):
+                    self.data = (self.data * 255).astype(np.uint8)
+
     def _set_image(self, property):
         img = None
+        if property == "data":
+            self._correct_data_type()
         if property in {"data", "data_format"}:
             if self.data_format == "rgb":
                 format = QImage.Format.Format_RGB888
-            img = QImage(self.data, self.data[1], self.data[0], format)
+            img = QImage(self.data, self.data.shape[1], self.data.shape[0], format)
         elif property == "path":
             img2 = QImage()
             if img2.load(self.path):
@@ -61,7 +69,7 @@ class Image(WidgetComponent):
         elif self.data:
             if self.data_format == "rgb":
                 format = QImage.Format.Format_RGB888
-            img = QImage(self.data, self.data[1], self.data[0], format)
+            img = QImage(self.data, self.data.shape[1], self.data.shape[0], format)
         elif self.path:
             img2 = QImage()
             if img2.load(self.path):
@@ -112,7 +120,7 @@ class LineEdit(WidgetComponent):
         return edit
 
     def update(self, element: QLineEdit, parent) -> QWidget:
-        element.setText(element)
+        element.setText(self.text)
         return element
 
 

@@ -15,7 +15,8 @@ class ConfigAlgFramework:
         f_config: Optional[Callable[[dict], PropertyUpdation]] = None,
         f_alg: Optional[Callable[[dict, PropertyQueryer], PropertyUpdation]] = None,
         automatic=False,
-        title=None
+        title=None,
+        timer=None
     ):
         """
         Routine:
@@ -28,6 +29,7 @@ class ConfigAlgFramework:
         self.f_alg = f_alg
         self.automatic = automatic
         self.title = title
+        self.timer = timer
 
     def set_trap(self, label, trap: FTrap):
         c = self.rt.get_component(label)

@@ -58,9 +58,8 @@ class Component:
     def set_property(self, property, value):
         if not hasattr(self, property):
             raise ValueError(f"{self} don't have property {property}")
-        if value != self.get_property(property):
-            setattr(self, property, value)
-            self._dirty.add(property)
+        setattr(self, property, value)
+        self._dirty.add(property)
 
     def get_property(self, property):
         return getattr(self, property)
