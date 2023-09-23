@@ -19,20 +19,35 @@ class ContainerComponent(Component):
         return False
 
     def visit_components(
-        self, component, f_pre=None, f_in=None, f_post=None, _init=False
+        self, component, f_pre=None, f_in=None, f_post=None, _init=False, _all=False
     ):
+        """
+        Args:
+            _init: initial call to visit_components or not
+            _all: visit all subnodes in the tree or not
+        """
+        pre, post = None, None
         if f_pre:
-            f_pre(component)
+            pre = f_pre(component)
 
         if isinstance(component, ContainerComponent) and (
-            _init or (not component.is_region())
+            _init or (not component.is_region()) or _all
         ):
             for c in component.subcomponents:
-                self.visit_components(c, f_pre, f_in, f_post, _init=False)
+                subpre, subpost = self.visit_components(
+                    c, f_pre, f_in, f_post, _init=False, _all=_all
+                )
                 if f_in:
-                    f_in(component)
+                    f_in(component, pre, subpre, subpost)
         if f_post:
-            f_post(component)
+            post = f_post(component, pre)
+        return pre, post
+
+    def clear_subcomponents(self):
+        self.subcomponents = []
+    
+    def add_subcomponent(self, c):
+        self.subcomponents.append(c)
 
     def clear_all_dirty(self):
         f_pre = lambda c: c.clear_dirty()
