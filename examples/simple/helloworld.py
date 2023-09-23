@@ -15,7 +15,7 @@ def f_alg(config: dict, queryer):
 
 
 def main():
-    rt = c.RootComponent()(c.Text("text1", text="hello world"))
+    rt = c.RegionComponent("root")(c.Text("text1", text="hello world"))
     config = Config()
     config.add_config("text", config.Type.STR, default_value="hello world")
     framwork = ConfigAlgFramework(

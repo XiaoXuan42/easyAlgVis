@@ -19,7 +19,7 @@ def f_alg(config: dict, queryer: PropertyQueryer):
 
 
 def main():
-    rt = c.RootComponent()(
+    rt = c.RegionComponent("root")(
         c.HBox()(
             c.Image("image1", width=200, height=200),
             c.Image("image2", width=200, height=200),

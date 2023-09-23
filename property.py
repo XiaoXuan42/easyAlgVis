@@ -9,7 +9,7 @@ class PropertyUpdation:
         d_label = self.label2updation.setdefault(label, {})
         d_label[property] = value
 
-    def update_properties(self, rt: components.RootComponent):
+    def update_properties(self, rt: components.RegionComponent):
         for label, updates in self.label2updation.items():
             c = rt.get_component(label)
             if not c:
@@ -19,7 +19,7 @@ class PropertyUpdation:
 
 
 class PropertyQueryer:
-    def __init__(self, rt: components.RootComponent) -> None:
+    def __init__(self, rt: components.RegionComponent) -> None:
         self.rt = rt
 
     def query(self, label, property=None):

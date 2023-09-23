@@ -10,7 +10,7 @@ from components import FTrap
 class ConfigAlgFramework:
     def __init__(
         self,
-        rt: components.RootComponent,
+        rt: components.RegionComponent,
         config: Config,
         f_config: Optional[Callable[[dict], PropertyUpdation]] = None,
         f_alg: Optional[Callable[[dict, PropertyQueryer], PropertyUpdation]] = None,

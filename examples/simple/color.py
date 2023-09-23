@@ -20,7 +20,7 @@ def f_alg(d, queryer):
 
 
 def main():
-    rt = c.RootComponent()(
+    rt = c.RegionComponent("root")(
         c.HBox()(
             c.VBox()(
                 c.LineEdit("r", text="0"),

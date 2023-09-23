@@ -15,12 +15,20 @@ class ContainerComponent(Component):
         super().__init__(label, trap=trap)
         self.subcomponents: List[Component] = []
 
-    def visit_components(self, component, f_pre=None, f_in=None, f_post=None):
+    def is_region(self):
+        return False
+
+    def visit_components(
+        self, component, f_pre=None, f_in=None, f_post=None, _init=False
+    ):
         if f_pre:
             f_pre(component)
-        if isinstance(component, ContainerComponent):
+
+        if isinstance(component, ContainerComponent) and (
+            _init or (not component.is_region())
+        ):
             for c in component.subcomponents:
-                self.visit_components(c, f_pre, f_in, f_post)
+                self.visit_components(c, f_pre, f_in, f_post, _init=False)
                 if f_in:
                     f_in(component)
         if f_post:
@@ -71,7 +79,9 @@ class BoxContainer(ContainerComponent):
         self.post_update(layout, subitems)
         return layout
 
-    def post_create(self, layout: QBoxLayout, subelements: List[ComponentElement]) -> None:
+    def post_create(
+        self, layout: QBoxLayout, subelements: List[ComponentElement]
+    ) -> None:
         for ele in subelements:
             if isinstance(ele, QWidget):
                 layout.addWidget(ele)

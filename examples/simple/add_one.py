@@ -12,7 +12,7 @@ def main():
         updation.add_updation("text", "text", str(cnt))
         return updation
 
-    rt = c.RootComponent()(
+    rt = c.RegionComponent("root")(
         c.Text("text", "0"),
         c.PushButton("", "add")
     )

@@ -4,7 +4,7 @@ from config import Config
 
 
 def main():
-    rt = c.RootComponent()(
+    rt = c.RegionComponent("root")(
         c.LineEdit("", "")
     )
     config = Config()

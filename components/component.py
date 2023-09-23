@@ -16,12 +16,15 @@ class Event:
 ComponentElement = Union[QLayout, QWidget, QSpacerItem]
 FTrap = Callable[[Event], Optional[Event]]
 
+
 class Component:
     def __init__(
         self,
         label,
         trap: Optional[FTrap],
     ) -> None:
+        if "::" in label:
+            raise ValueError(f"'::' is not allowed in label")
         self.label = label
         self._c_parent = None
         self._trap = trap
@@ -31,7 +34,7 @@ class Component:
         old_trap = self._trap
         self._trap = trap
         return old_trap
-    
+
     def set_parent(self, c_parent: "Component"):
         old_c_parent = self._c_parent
         self._c_parent = c_parent
