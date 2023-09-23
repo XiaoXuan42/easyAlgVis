@@ -32,7 +32,7 @@ def main():
     )
     config = Config()
     framework = ConfigAlgFramework(rt, config, f_alg=f_alg, title="color")
-    def trap(e):
+    def trap(c, e):
         nonlocal framework
         if e.name == "text_changed":
             framework.run_alg()

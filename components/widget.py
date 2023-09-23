@@ -112,7 +112,7 @@ class LineEdit(WidgetComponent):
 
     def _on_text_changed(self, new_text):
         self.set_property("text", new_text)
-        self.prop_event(Event(self, "text_changed", new_text))
+        self.prop_event(Event(self.label, self, "text_changed", new_text))
 
     def create(self, parent) -> ComponentElement:
         edit = QLineEdit(self.text, parent)
@@ -140,7 +140,7 @@ class PushButton(WidgetComponent):
 
     def _on_clicked(self):
         self.set_property("state", (not self.state))
-        self.prop_event(Event(self, "clicked", self.state))
+        self.prop_event(Event(self.label, self, "clicked", self.state))
 
     def create(self, parent) -> ComponentElement:
         btn = QPushButton(self.text, parent)

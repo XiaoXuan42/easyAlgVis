@@ -7,14 +7,15 @@ from typing import List, Union, Optional, Callable
 
 
 class Event:
-    def __init__(self, component: "Component", name: str, data) -> None:
+    def __init__(self, label, component: "Component", name: str, data) -> None:
+        self.label = label
         self.component = component
         self.name = name
         self.data = data
 
 
 ComponentElement = Union[QLayout, QWidget, QSpacerItem]
-FTrap = Callable[[Event], Optional[Event]]
+FTrap = Callable[["Component", Event], Optional[Event]]
 
 
 class Component:
@@ -35,6 +36,13 @@ class Component:
         self._trap = trap
         return old_trap
 
+    def has_trap(self):
+        return self._trap != None
+
+    def trap(self, event: Event):
+        if self._trap:
+            return self._trap(self, event)
+
     def set_parent(self, c_parent: "Component"):
         old_c_parent = self._c_parent
         self._c_parent = c_parent
@@ -43,8 +51,8 @@ class Component:
     def prop_event(self, event: Event):
         cur = self
         while cur is not None:
-            if cur._trap:
-                event = cur._trap(event)
+            if cur.has_trap():
+                event = cur.trap(event)
             if not event:
                 break
             cur = cur._c_parent

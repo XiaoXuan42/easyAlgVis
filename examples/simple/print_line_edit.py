@@ -10,7 +10,7 @@ def main():
     config = Config()
     framework = ConfigAlgFramework(rt, config, automatic=True, title="print directly")
 
-    def trap(e):
+    def trap(c, e):
         if e.name == "text_changed":
             print(e.data)
 

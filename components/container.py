@@ -48,6 +48,7 @@ class ContainerComponent(Component):
     
     def add_subcomponent(self, c):
         self.subcomponents.append(c)
+        c.set_parent(self)
 
     def clear_all_dirty(self):
         f_pre = lambda c: c.clear_dirty()
@@ -72,9 +73,9 @@ class ContainerComponent(Component):
         pass
 
     def __call__(self, *args):
-        self.subcomponents = list(args)
-        for c in self.subcomponents:
-            c._c_parent = self
+        self.clear_subcomponents()
+        for c in list(args):
+            self.add_subcomponent(c)
         return self
 
 

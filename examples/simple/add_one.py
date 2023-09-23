@@ -19,7 +19,7 @@ def main():
     config = Config()
     window = ConfigAlgFramework(rt, config, f_alg=f_alg)
 
-    def root_trap(e):
+    def root_trap(c, e):
         nonlocal window, cnt
         cnt += 1
         window.run_alg()

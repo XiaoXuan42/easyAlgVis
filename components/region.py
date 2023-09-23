@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QLayout, QBoxLayout
 from typing import Dict, Optional
-from components.component import Component
+from components.component import Component, Event
 from components.container import VBox, ContainerComponent
 import copy
 
@@ -12,6 +12,17 @@ class RegionComponent(VBox):
 
         super().__init__(label=label)
         self.label2component: Dict[str, Component] = {}
+
+    def has_trap(self):
+        return True
+    
+    def trap(self, event: Event):
+        e = event
+        if self._trap:
+            e = self._trap(self, event)
+        if e:
+            e = Event(f"{self.label}::{e.label}", e.component, e.name, e.data)
+        return e
 
     def clear_subcomponents(self):
         super().clear_subcomponents()
@@ -33,12 +44,10 @@ class RegionComponent(VBox):
 
     def create(self, parent) -> QLayout:
         layout = super().create(parent)
-        self._build_refs()
         return layout
 
     def update(self, layout: QBoxLayout, parent) -> QLayout:
         layout = super().update(layout, parent)
-        self._build_refs()
         return layout
 
     def get_component(self, label) -> Optional[Component]:
